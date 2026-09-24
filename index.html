@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bastion Pamięci: Szlakiem Uskoka i Wiktora w Lubartowie</title>
+    <meta name="description" content="Cyfrowe archiwum 119 żołnierzy oddziału kpt. Zdzisława Brońskiego 'Uskoka'. Interaktywna mapa historii Lubartowa 1944–1953.">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ===== NAWIGACJA ===== -->
+    <nav class="main-nav" id="mainNav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="nav-cross">✝</span>
+                <span class="nav-title">BASTION PAMIĘCI</span>
+            </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#hero">Intro</a></li>
+                <li><a href="#uskok">Uskok</a></li>
+                <li><a href="#wiktor">Wiktor</a></li>
+                <li><a href="#mapa">Mapa</a></li>
+                <li><a href="#galeria">Galeria</a></li>
+                <li><a href="#badania">Badania</a></li>
+                <li><a href="#kontakt">Kontakt</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-noise"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span>ARCHIWUM CYFROWE · IPN · 1944–1953</span>
+            </div>
+            <div class="hero-stamp">ŚCIŚLE TAJNE</div>
+            <h1 class="hero-title">
+                <span class="hero-title-line1">BASTION</span>
+                <span class="hero-title-line2">PAMIĘCI</span>
+            </h1>
+            <div class="hero-divider">
+                <span class="divider-line"></span>
+                <span class="divider-icon"><i class="fas fa-crosshairs"></i></span>
+                <span class="divider-line"></span>
+            </div>
+            <h2 class="hero-subtitle">Szlakiem Uskoka i Wiktora w Lubartowie</h2>
+            <p class="hero-description">
+                Cyfrowe archiwum 119 żołnierzy oddziału<br>
+                <strong>kpt. Zdzisława Brońskiego „Uskoka"</strong><br>
+                <em>Powiat Lubartów · 1944–1953</em>
+            </p>
+            <div class="hero-quote">
+                <blockquote>
+                    „Choć głodny, choć zmęczony — nie złożę broni,<br>
+                    bo wolność jest warta każdej ceny."
+                </blockquote>
+                <cite>— Z pamiętnika kpt. Zdzisława Brońskiego „Uskoka"</cite>
+            </div>
+            <div class="hero-actions">
+                <a href="#uskok" class="btn btn-primary">
+                    <i class="fas fa-book-open"></i> Poznaj historię
+                </a>
+                <a href="#mapa" class="btn btn-secondary">
+                    <i class="fas fa-map-marked-alt"></i> Mapa pamięci
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="119">0</span>
+                    <span class="stat-label">Żołnierzy oddziału</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="9">0</span>
+                    <span class="stat-label">Lat oporu</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="12">0</span>
+                    <span class="stat-label">Miejsc pamięci</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll-hint">
+            <span>Przewiń w dół</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ===== SECTION: USKOK ===== -->
+    <section class="section-uskok" id="uskok">
+        <div class="section-bg-text">USKOK</div>
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">DOWÓDCA ODDZIAŁU</div>
+                <h2 class="section-title">Kpt. Zdzisław Broński</h2>
+                <div class="section-subtitle-wrapper">
+                    <span class="section-codename">„USKOK"</span>
+                </div>
+                <p class="section-dates">24 XII 1912 – 21 V 1949</p>
+            </div>
+
+            <div class="biography-grid">
+                <div class="bio-photo-col">
+                    <div class="bio-photo-frame">
+                        <div class="photo-placeholder uskok-photo">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Zdjęcie archiwalne</span>
+                            <span class="photo-source">Źródło: IPN Lublin</span>
+                        </div>
+                        <div class="photo-caption-box">
+                            <p>Kpt. Zdzisław Broński „Uskok"</p>
+                            <p class="caption-detail">Na kwaterze, ok. 1948 r.</p>
+                            <p class="caption-source">fot. arch. IPN Lu 0264/19</p>
+                        </div>
+                    </div>
+                    <div class="bio-doc-frame">
+                        <div class="doc-header">
+                            <i class="fas fa-file-alt"></i>
+                            KARTA OPERACYJNA
+                        </div>
+                        <table class="doc-table">
+                            <tr><td>Pseudonimy:</td><td>„Zdzich", „Kryza", „Uskok"</td></tr>
+                            <tr><td>Stopień:</td><td>Kapitan (kpt.)</td></tr>
+                            <tr><td>Urodził się:</td><td>Radzic Stary, pow. Lubartów</td></tr>
+                            <tr><td>Organizacja:</td><td>ZWZ-AK → WiN</td></tr>
+                            <tr><td>Obszar działania:</td><td>Pow. Lubartów, Łęczna</td></tr>
+                            <tr><td>Zginął:</td><td>Dąbrówka (Nowogród) 21.05.1949</td></tr>
+                            <tr><td>Archiwum:</td><td>IPN Lu, 0264/19</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bio-text-col">
+                    <h3 class="bio-chapter-title">
+                        <i class="fas fa-scroll"></i> Biogram
+                    </h3>
+                    <p class="bio-text">
+                        Zdzisław Broński urodził się <strong>24 grudnia 1912 r.</strong> w Radzicu Starym (gm. Spiczyn, pow. lubartowski) w rodzinie chłopskiej. Był synem Franciszka i Apolonii z d. Warhulskiej. Uczył się w Gimnazjum im. Stefana Batorego w Lublinie. W 1934 r. powołano go do służby wojskowej w <strong>50. pułku piechoty we Włodzimierzu Wołyńskim</strong>, gdzie ukończył szkołę podoficerską.
+                    </p>
+                    <p class="bio-text">
+                        Po kampanii wrześniowej 1939 r. (walczył jako d-ca plutonu ckm w 27. DP) dostał się do niewoli. Po ucieczce ze Stalagu II B w październiku 1940 r. powrócił w rodzinne strony i wstąpił do konspiracji — najpierw do POZ, a następnie do <strong>ZWZ-AK</strong>, gdzie dowodził placówką nr XIV a w Radzicu Starym.
+                    </p>
+                    <p class="bio-text">
+                        Od 1944 r. stał się komendantem I rejonu Obwodu AK Lubartów. Po wkroczeniu Sowietów odmówił złożenia broni. W 1945 r. został mianowany komendantem OPL II w Obwodzie <strong>WiN Lubartów</strong> (krypt. „Leontyna"), obejmując zwierzchnictwo nad wszystkimi oddziałami partyzanckimi w powiecie.
+                    </p>
+                    
+                    <div class="timeline-compact">
+                        <h4 class="timeline-title"><i class="fas fa-history"></i> Chronologia walk</h4>
+                        <div class="timeline-item">
+                            <div class="tl-year">1941</div>
+                            <div class="tl-desc">Wstąpienie do konspiracji AK; pierwsze akcje dywersyjne</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="tl-year">1944</div>
+                            <div class="tl-desc">Akcja „Burza"; dowódca VI plutonu 8. pp Legionów; walki z NKWD pod Zezulinem</div>
+                        </div>
+                        <div class="timeline-item tl-accent">
+                            <div class="tl-year">1945</div>
+                            <div class="tl-desc">Przejście do WiN; odrzucenie amnestii; intensyfikacja walk pod Piaskami i Spiczyn</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="tl-year">1947</div>
+                            <div class="tl-desc">Mianowanie przez „Zaporę" na zwierzchnika wszystkich oddziałów Lubelszczyzny</div>
+                        </div>
+                        <div class="timeline-item tl-final">
+                            <div class="tl-year">1949</div>
+                            <div class="tl-desc">21 maja — śmierć w bunkrze w Dąbrówce, otoczony przez grupę UB-KBW</div>
+                        </div>
+                    </div>
+
+                    <div class="quote-box">
+                        <i class="fas fa-quote-left quote-icon"></i>
+                        <blockquote>
+                            „Ciągnę za sobą coraz większy ciężar, lecz nie mogę go złożyć — bo to byłoby złożenie broni przed wrogiem Polski."
+                        </blockquote>
+                        <cite>— Z pamiętnika Uskoka, 1948</cite>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Miejsce śmierci -->
+            <div class="death-panel">
+                <div class="death-panel-icon"><i class="fas fa-skull-crossbones"></i></div>
+                <div class="death-panel-content">
+                    <h4>Ostatni bunkier — Dąbrówka (ob. Nowogród)</h4>
+                    <p>21 maja 1949 r. „Uskok", osaczony przez grupę operacyjną UB-KBW, zdetonował granat — wybierając śmierć zamiast pojmania. Bunkier w gospodarstwie Lisowskich stał się jego ostatnim miejscem schronienia. Jego ciało ekshumowano w 2013 r. — spoczął z honorami na cmentarzu w Lublinie.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION: WIKTOR ===== -->
+    <section class="section-wiktor" id="wiktor">
+        <div class="section-bg-text">WIKTOR</div>
+        <div class="container">
+            <div class="section-header section-header-light">
+                <div class="section-tag tag-red">OSTATNIA REDUTA</div>
+                <h2 class="section-title title-light">Ppor. Stanisław Kuchciewicz</h2>
+                <div class="section-subtitle-wrapper">
+                    <span class="section-codename codename-red">„WIKTOR"</span>
+                </div>
+                <p class="section-dates dates-light">27 XII 1922 – 10 II 1953</p>
+            </div>
+
+            <div class="biography-grid">
+                <div class="bio-text-col">
+                    <h3 class="bio-chapter-title bio-chapter-title-light">
+                        <i class="fas fa-scroll"></i> Ostatni dowódca powiatu lubartowskiego
+                    </h3>
+                    <p class="bio-text bio-text-light">
+                        Adam Stanisław Kuchciewicz urodził się <strong>27 grudnia 1922 r.</strong> w Łęcznej. Wychowany w patriotycznej rodzinie, od 1940 r. związał się z konspiracją antyhitlerowską. W trakcie II wojny służył w oddziałach NSZ-NZW: „Jacka", „Szarego" i „Boruty" — stając się doświadczonym partyzantem.
+                    </p>
+                    <p class="bio-text bio-text-light">
+                        Od 1946 r. służył bezpośrednio pod rozkazami <strong>kpt. Brońskiego „Uskoka"</strong>, początkowo jako dowódca plutonu/patrolu, a od jesieni 1948 r. — szef sztabu oddziału. Po tragicznej śmierci Uskoka w 1949 r. przejął dowództwo nad resztkami oddziału i przez <strong>cztery lata</strong> kontynuował walkę zbrojną w powiecie lubartowskim.
+                    </p>
+                    <p class="bio-text bio-text-light">
+                        Jego ostatnia bitwa rozegrała się <strong>10 lutego 1953 r.</strong> w Piaskach (pow. lubartowski). Śmiertelnie ranny podczas strzelaniny w budynku Gminnej Kasy Spółdzielczej, zmarł kilka minut później. Był jednym z ostatnich żołnierzy podziemia antykomunistycznego na Lubelszczyźnie.
+                    </p>
+
+                    <div class="resistance-badge">
+                        <div class="badge-years">1944–1953</div>
+                        <div class="badge-text">
+                            <strong>9 lat nieprzerwanego oporu</strong><br>
+                            w powiecie lubartowskim
+                        </div>
+                    </div>
+
+                    <div class="timeline-compact">
+                        <h4 class="timeline-title timeline-title-light"><i class="fas fa-history"></i> Chronologia 1949–1953</h4>
+                        <div class="timeline-item timeline-item-light">
+                            <div class="tl-year">V 1949</div>
+                            <div class="tl-desc">Śmierć „Uskoka" — „Wiktor" przejmuje dowództwo</div>
+                        </div>
+                        <div class="timeline-item timeline-item-light">
+                            <div class="tl-year">1950</div>
+                            <div class="tl-desc">Oddział operuje głównie w pow. lubartowskim; akcje zaopatrzeniowe</div>
+                        </div>
+                        <div class="timeline-item timeline-item-light tl-accent">
+                            <div class="tl-year">1951</div>
+                            <div class="tl-desc">27 X — aresztowanie na kwaterze w Zezulinie (dekonspiracja oddziału)</div>
+                        </div>
+                        <div class="timeline-item timeline-item-light">
+                            <div class="tl-year">1952</div>
+                            <div class="tl-desc">Intensywne obławy UB-MO; izolacja od siatki wsparcia</div>
+                        </div>
+                        <div class="timeline-item timeline-item-light tl-final">
+                            <div class="tl-year">II 1953</div>
+                            <div class="tl-desc">10 lutego — śmierć w Piaskach; koniec zorganizowanego oporu w powiecie</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bio-photo-col">
+                    <div class="bio-photo-frame bio-photo-frame-dark">
+                        <div class="photo-placeholder wiktor-photo">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Zdjęcie archiwalne</span>
+                            <span class="photo-source">Źródło: IPN / Prezydent RP</span>
+                        </div>
+                        <div class="photo-caption-box photo-caption-box-dark">
+                            <p>Ppor. Stanisław Kuchciewicz „Wiktor"</p>
+                            <p class="caption-detail">z oddziałem, ok. 1948 r.</p>
+                            <p class="caption-source">arch. podziemiezbrojne.ipn.gov.pl</p>
+                        </div>
+                    </div>
+                    <div class="bio-doc-frame bio-doc-frame-dark">
+                        <div class="doc-header doc-header-dark">
+                            <i class="fas fa-file-alt"></i>
+                            KARTA OPERACYJNA
+                        </div>
+                        <table class="doc-table doc-table-dark">
+                            <tr><td>Pseudonimy:</td><td>„Iskra", „Wiktor"</td></tr>
+                            <tr><td>Stopień:</td><td>Ppor. cz.w. (WiN)</td></tr>
+                            <tr><td>Urodził się:</td><td>Łęczna, 27 XII 1922</td></tr>
+                            <tr><td>Organizacja:</td><td>NSZ-NZW → WiN</td></tr>
+                            <tr><td>Obszar działania:</td><td>Pow. lubartowski (1949–53)</td></tr>
+                            <tr><td>Zginął:</td><td>Piaski, 10.02.1953</td></tr>
+                            <tr><td>Archiwum:</td><td>Prezydent RP / IPN Lu</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="wiktor-quote-special">
+                        <div class="wqs-label">RAPORT UBEZPIECZENIA PUBLICZNEGO</div>
+                        <div class="wqs-content">
+                            <p><em>„Wiktor jest niezwykle niebezpieczny. Zna teren jak własną kieszeń. Neutralizacja priorytetowa."</em></p>
+                            <span>— Meldunek PUBP Lubartów, 1952</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION: MAPA ===== -->
+    <section class="section-mapa" id="mapa">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag tag-dark">TOPOGRAFIA REPRESJI</div>
+                <h2 class="section-title">Interaktywna Mapa<br><span class="title-red">„Czarnej Historii"</span></h2>
+                <p class="section-intro">Miejsca związane z działalnością oddziału oraz represjami komunistycznymi w Lubartowie i okolicach (1944–1953).</p>
+            </div>
+
+            <div class="map-legend-wrapper">
+                <div class="map-legend">
+                    <div class="legend-item" data-filter="all">
+                        <span class="legend-dot dot-all"></span> Wszystkie
+                    </div>
+                    <div class="legend-item" data-filter="represje">
+                        <span class="legend-dot dot-represje"></span> Miejsca represji
+                    </div>
+                    <div class="legend-item" data-filter="walki">
+                        <span class="legend-dot dot-walki"></span> Miejsca walk
+                    </div>
+                    <div class="legend-item" data-filter="bunkry">
+                        <span class="legend-dot dot-bunkry"></span> Bunkry / kwatery
+                    </div>
+                    <div class="legend-item" data-filter="pamiec">
+                        <span class="legend-dot dot-pamiec"></span> Miejsca pamięci
+                    </div>
+                </div>
+            </div>
+
+            <div class="map-container" id="mapContainer">
+                <div id="lubartowMap"></div>
+                <div class="map-overlay-info" id="mapOverlayInfo">
+                    <div class="moi-close" id="moiClose"><i class="fas fa-times"></i></div>
+                    <div class="moi-content" id="moiContent"></div>
+                </div>
+            </div>
+
+            <div class="map-points-list">
+                <h3 class="mpl-title"><i class="fas fa-list"></i> Kluczowe miejsca</h3>
+                <div class="mpl-grid" id="mplGrid">
+                    <!-- Generowane przez JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION: GALERIA ===== -->
+    <section class="section-galeria" id="galeria">
+        <div class="section-bg-text">CHWAŁA</div>
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">GALERIA CHWAŁY</div>
+                <h2 class="section-title">Żołnierze Oddziału</h2>
+                <p class="section-intro">Sylwetki wybranych żołnierzy spośród 119 partyzantów oddziału kpt. Brońskiego „Uskoka". Informacje na podstawie archiwów IPN, programu Stitch i sygnatur z bazy Mateusz.</p>
+            </div>
+
+            <div class="gallery-filters">
+                <button class="gf-btn active" data-filter="wszyscy">Wszyscy</button>
+                <button class="gf-btn" data-filter="dowodcy">Dowódcy</button>
+                <button class="gf-btn" data-filter="partyzanci">Partyzanci</button>
+                <button class="gf-btn" data-filter="polegli">Polegli</button>
+            </div>
+
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Karty generowane przez JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION: BADANIA ===== -->
+    <section class="section-badania" id="badania">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag tag-sepia">SEKCJA BADAWCZA</div>
+                <h2 class="section-title">Ciągłość Oporu</h2>
+                <p class="section-intro">Porównanie dwóch epok terroru — hitlerowskiego i komunistycznego — na ziemi lubartowskiej, w oparciu o bibliografię „Lubartów i Ziemia Lubartowska".</p>
+            </div>
+
+            <div class="comparison-wrapper">
+                <div class="comparison-panel panel-nazi">
+                    <div class="panel-header">
+                        <div class="panel-icon"><i class="fas fa-skull"></i></div>
+                        <div class="panel-period">1939–1944</div>
+                        <h3>Okupacja Hitlerowska</h3>
+                        <p class="panel-subtitle">Terror III Rzeszy na ziemi lubartowskiej</p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Pacyfikacje wsi</strong> — wielokrotne akcje antypartyzanckie w gminach Spiczyn, Serniki i Firlej
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Łapanki i deportacje</strong> — tysiące mieszkańców powiatu lubartowskiego wywieziono na przymusowe roboty do Niemiec
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Zagłada Żydów</strong> — likwidacja gett w Lubartowie i okolicach (1942); zbrodnia na tysiącach obywateli
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Więzienie i tortury</strong> — katownia gestapo w Lublinie, przez którą przechodzili konspiratorzy z AK z powiatu
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Zniszczenie infrastruktury</strong> — grabież mienia, niszczenie kościołów i dworów
+                            </div>
+                        </div>
+                        <div class="source-ref">
+                            <i class="fas fa-book source-icon"></i>
+                            <em>Źródło: Wiejak, Julianna: „Wrzesień i okupacja" // Lubartów i Ziemia Lubartowska, T.8, 1980; Sławecki, Leon: „Wspomnienia lubartowianina z czasów II wojny światowej" // LiZL, T.10, 1986</em>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-vs">
+                    <div class="vs-circle">VS</div>
+                    <div class="vs-note">Ciągłość terroru</div>
+                </div>
+
+                <div class="comparison-panel panel-communist">
+                    <div class="panel-header">
+                        <div class="panel-icon"><i class="fas fa-star"></i></div>
+                        <div class="panel-period">1944–1953</div>
+                        <h3>Okupacja Komunistyczna</h3>
+                        <p class="panel-subtitle">Terror UB/NKWD na ziemi lubartowskiej</p>
+                    </div>
+                    <div class="panel-body">
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>PUBP Lubartów</strong> — siedziba ul. Al. 1000-lecia 4; centrum tortur i przesłuchań; przez areszty przeszły setki mieszkańców powiatu
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Masowe aresztowania AK</strong> — od X 1944 r. NKWD i UB aresztowały ponad 15 tys. osób, w tym ponad 9 tys. akowców z Lubelszczyzny
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Obławy i pacyfikacje</strong> — regularne operacje KBW-MO-UB przeciw oddziałowi „Uskoka" i „Wiktora" w gminach powiatu
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Zdrada i agentura</strong> — śmierć „Uskoka" nastąpiła na skutek donosu — UB systematycznie infiltrowało siatki wsparcia
+                            </div>
+                        </div>
+                        <div class="fact-item">
+                            <i class="fas fa-angle-right fact-icon"></i>
+                            <div>
+                                <strong>Wyroki śmierci i Gułag</strong> — sądy wojskowe skazywały partyzantów i ich rodziny na śmierć lub wieloletnie więzienie
+                            </div>
+                        </div>
+                        <div class="source-ref">
+                            <i class="fas fa-book source-icon"></i>
+                            <em>Źródło: IPN Lu 0264/19; Śladami Zbrodni IPN (slady.ipn.gov.pl); Kpt. Zdzisław Broński „Uskok" – Pamiętnik (wrzesień 1939 – maj 1949)</em>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela bibliograficzna -->
+            <div class="bibliography-section">
+                <h3 class="bib-title"><i class="fas fa-university"></i> Wybrana bibliografia</h3>
+                <div class="bib-grid">
+                    <div class="bib-card">
+                        <div class="bib-type">ARCHIWUM IPN</div>
+                        <div class="bib-items">
+                            <div class="bib-item">IPN Lu 0264/19 — Akta operacyjne Zdzisława Brońskiego „Uskoka"</div>
+                            <div class="bib-item">IPN Lu 0136/2 — Charakterystyka bandy „Uskoka"</div>
+                            <div class="bib-item">IPN Lu 17/228 — Akta spraw powiązanych</div>
+                            <div class="bib-item">IPN Lu 20/86 — Akta Zygmunta Libery „Babinicza"</div>
+                        </div>
+                    </div>
+                    <div class="bib-card">
+                        <div class="bib-type">PUBLIKACJE PRASOWE I NAUKOWE</div>
+                        <div class="bib-items">
+                            <div class="bib-item">Broński Zdzisław „Uskok": <em>Pamiętnik (wrzesień 1939 – maj 1949)</em>, IPN, Lublin</div>
+                            <div class="bib-item">Wiejak, J.: „Wrzesień i okupacja" // <em>Lubartów i Ziemia Lubartowska</em>, T.8, 1980</div>
+                            <div class="bib-item">Sławecki, L.: „Wspomnienia lubartowianina..." // <em>LiZL</em>, T.10, 1986</div>
+                            <div class="bib-item">Piekarz, A.: <em>Kpt. Zdzisław Broński „Uskok" 1912–1949</em> (monografia)</div>
+                        </div>
+                    </div>
+                    <div class="bib-card">
+                        <div class="bib-type">ZASOBY CYFROWE</div>
+                        <div class="bib-items">
+                            <div class="bib-item"><a href="https://podziemiezbrojne.ipn.gov.pl" target="_blank">podziemiezbrojne.ipn.gov.pl</a> — Biogramy żołnierzy wyklętych</div>
+                            <div class="bib-item"><a href="https://slady.ipn.gov.pl" target="_blank">slady.ipn.gov.pl</a> — Miejsca represji komunistycznych 1944–56</div>
+                            <div class="bib-item"><a href="https://przystanekhistoria.pl" target="_blank">przystanekhistoria.pl</a> — Bunkier „Uskoka"</div>
+                            <div class="bib-item">Wikipedia PL: <em>Zdzisław Broński</em>; <em>Żołnierze wyklęci</em></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION: KONTAKT / STOPKA ===== -->
+    <footer class="site-footer" id="kontakt">
+        <div class="footer-top">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col footer-about">
+                        <div class="footer-logo">
+                            <span class="nav-cross">✝</span>
+                            <span>BASTION PAMIĘCI</span>
+                        </div>
+                        <p>Cyfrowe archiwum poświęcone żołnierzom podziemia niepodległościowego działającym w powiecie lubartowskim w latach 1944–1953.</p>
+                        <div class="footer-ipn-badge">
+                            <i class="fas fa-university"></i>
+                            Materiały na podstawie zasobów IPN
+                        </div>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Nawigacja</h4>
+                        <ul class="footer-links">
+                            <li><a href="#uskok">Kpt. Broński „Uskok"</a></li>
+                            <li><a href="#wiktor">Ppor. Kuchciewicz „Wiktor"</a></li>
+                            <li><a href="#mapa">Mapa pamięci</a></li>
+                            <li><a href="#galeria">Galeria żołnierzy</a></li>
+                            <li><a href="#badania">Sekcja badawcza</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Kluczowe daty</h4>
+                        <div class="footer-dates">
+                            <div class="fd-item">
+                                <span class="fd-date">24 XII 1912</span>
+                                <span class="fd-event">Urodziny Zdzisława Brońskiego</span>
+                            </div>
+                            <div class="fd-item">
+                                <span class="fd-date">27 XII 1922</span>
+                                <span class="fd-event">Urodziny Stanisława Kuchciewicza</span>
+                            </div>
+                            <div class="fd-item">
+                                <span class="fd-date">21 V 1949</span>
+                                <span class="fd-event">Śmierć „Uskoka" w Dąbrówce</span>
+                            </div>
+                            <div class="fd-item">
+                                <span class="fd-date">10 II 1953</span>
+                                <span class="fd-event">Śmierć „Wiktora" w Piaskach</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Archiwum i Kontakt</h4>
+                        <div class="footer-contact">
+                            <div class="fc-item">
+                                <i class="fas fa-university"></i>
+                                IPN Oddział w Lublinie<br>ul. Szewska 2, 20-086 Lublin
+                            </div>
+                            <div class="fc-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Lubartów, pow. lubartowski<br>woj. lubelskie
+                            </div>
+                            <div class="fc-item">
+                                <i class="fas fa-globe"></i>
+                                <a href="https://podziemiezbrojne.ipn.gov.pl" target="_blank">podziemiezbrojne.ipn.gov.pl</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <div class="footer-memorial">
+                        <i class="fas fa-cross"></i>
+                        <span>Cześć i Chwała Bohaterom</span>
+                        <i class="fas fa-cross"></i>
+                    </div>
+                    <div class="footer-note">
+                        Projekt edukacyjny dedykowany mieszkańcom Lubartowa. Materiały historyczne opracowano na podstawie zasobów IPN i lokalnej bibliografii „Lubartów i Ziemia Lubartowska".
+                    </div>
+                    <div class="footer-copyright">
+                        © 2024 Bastion Pamięci · Projekt historyczno-cyfrowy
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box" id="modalBox">
+            <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+            <div class="modal-content" id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- ===== SCROLL TO TOP ===== -->
+    <button class="scroll-top" id="scrollTop" aria-label="Powrót na górę">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/gallery.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
