@@ -143,6 +143,8 @@ README.md           – Dokumentacja projektu
 
 ---
 
+
+
 *Projekt dedykowany mieszkańcom Lubartowa i pamięci niezłomnych żołnierzy podziemia niepodległościowego.*
 
 **Cześć i Chwała Bohaterom** ✝
