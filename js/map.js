@@ -39,21 +39,51 @@
         });
     }
 
-    // Inicjalizacja mapy Leaflet
+   // Inicjalizuje mapę Leaflet
     function initMap() {
-        const mapContainer = document.getElementById('map');
-        if (!mapContainer) return;
+        const mapEl = document.getElementById('lubartowMap');
+        if (!mapEl || typeof L === 'undefined') return;
 
-        // Domyślny środek (rejon Lubartowa/Spleczy/Radzic)
-        const defaultCenter = [51.462, 22.608];
-        const defaultZoom = 11;
-
-        map = L.map('map', {
-            center: defaultCenter,
-            zoom: defaultZoom,
+        // Centrum mapy – Lubartów
+        map = L.map('lubartowMap', {
+            center: [51.43, 22.70],
+            zoom: 10,
             zoomControl: true,
-            scrollWheelZoom: false
+            attributionControl: false
         });
+
+        // Niezawodna warstwa kafelkowa CARTO Voyager bez wymagania klucza API
+        const tileProvider = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+            maxZoom: 19,
+            subdomains: 'abcd',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        }).addTo(map);
+
+        // Fallback na wypadek problemów z siecią (używa darmowych kafelków CyclOSM)
+        tileProvider.on('tileerror', () => {
+            if (window._bastionMapFallbackUsed) return;
+            window._bastionMapFallbackUsed = true;
+            console.warn('Bastion: przełączam na zapasową warstwę CyclOSM.');
+            const fallback = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+                maxZoom: 18,
+                subdomains: 'abc',
+                attribution: '&copy; OpenStreetMap contributors'
+            });
+            map.removeLayer(tileProvider);
+            fallback.addTo(map);
+        });
+
+        // Dodaj atrybuty
+        L.control.attribution({ position: 'bottomleft', prefix: false })
+            .addAttribution('© OpenStreetMap · IPN Lublin')
+            .addTo(map);
+
+        // Dodaj wszystkie markery
+        addMarkers(MAP_POINTS);
+
+        // Generuj listę punktów
+        generatePointsList(MAP_POINTS);
+    }
 
         // TŁO MAPY (Zmienione na otwarte kafelki Carto Voyager - NIE WYMAGAJĄ KLUCZA API)
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
