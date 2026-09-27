@@ -1,6 +1,6 @@
 /**
- * BASTION PAMIĘCI - Interaktywna Mapa
- * Leaflet.js z OpenStreetMap / Carto
+ * BASTION PAMIĘCI – Interaktywna Mapa
+ * Leaflet.js z OpenStreetMap
  */
 
 (function() {
@@ -13,33 +13,66 @@
     // Kolory markerów według kategorii
     const MARKER_COLORS = {
         represje: '#cc0000',
-        walki: '#ff6600',
-        bunkry: '#006633',
-        pamiec: '#3366cc'
+        walki:    '#ff6600',
+        bunkry:   '#006633',
+        pamiec:   '#3366cc'
     };
 
     // Ikony SVG dla markerów
     function createMarkerIcon(type, isHighImportance) {
-        const color = MARKER_COLORS[type] || '#999999';
-        const size = isHighImportance ? 24 : 18;
-        
+        const color = MARKER_COLORS[type] || '#999';
+        const size = isHighImportance ? 22 : 16;
         const svg = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${size}" height="${size}">
-                <circle cx="12" cy="12" r="9" fill="${color}" stroke="#ffffff" stroke-width="2.5"/>
-                ${isHighImportance ? `<circle cx="12" cy="12" r="4" fill="#ffffff"/>` : ''}
+            <svg xmlns="http://www.w3.org/2000/svg" width="${size + 8}" height="${size + 14}" viewBox="0 0 ${size + 8} ${size + 14}">
+                <defs>
+                    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.6"/>
+                    </filter>
+                </defs>
+                <circle cx="${(size + 8) / 2}" cy="${size / 2 + 2}" r="${size / 2}" 
+                    fill="${color}" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"
+                    filter="url(#shadow)"/>
+                <line x1="${(size + 8) / 2}" y1="${size + 2}" 
+                      x2="${(size + 8) / 2}" y2="${size + 13}" 
+                    stroke="${color}" stroke-width="2" opacity="0.8"/>
+                ${isHighImportance ? `<circle cx="${(size + 8) / 2}" cy="${size / 2 + 2}" r="${size / 2 - 4}" fill="rgba(255,255,255,0.25)"/>` : ''}
             </svg>
         `;
-
         return L.divIcon({
             html: svg,
-            className: 'custom-map-marker',
-            iconSize: [size, size],
-            iconAnchor: [size / 2, size / 2],
-            popupAnchor: [0, -size / 2]
+            iconSize: [size + 8, size + 14],
+            iconAnchor: [(size + 8) / 2, size + 13],
+            popupAnchor: [0, -(size + 10)],
+            className: 'custom-marker'
         });
     }
 
-   // Inicjalizuje mapę Leaflet
+    // Buduje HTML popup-a dla markera
+    function buildPopupHTML(point) {
+        const typeLabels = {
+            represje: 'Miejsce represji',
+            walki:    'Miejsce walki',
+            bunkry:   'Bunkier / kwatera',
+            pamiec:   'Miejsce pamięci'
+        };
+        
+        return `
+            <div class="popup-title">${point.name}</div>
+            <span class="popup-type popup-type-${point.type}">${typeLabels[point.type] || point.type}</span>
+            <div class="popup-desc">${point.description}</div>
+            <div class="popup-date">
+                <i class="fas fa-clock" style="margin-right:4px;"></i>${point.date}
+            </div>
+            ${point.address ? `<div class="popup-date" style="color: #c8b89a; margin-top: 4px;">
+                <i class="fas fa-map-marker-alt" style="margin-right:4px;"></i>${point.address}
+            </div>` : ''}
+            <div class="popup-date" style="color: rgba(139,105,20,0.5); margin-top:6px; font-size:0.6rem;">
+                Źródło: ${point.source}
+            </div>
+        `;
+    }
+
+    // Inicjalizuje mapę Leaflet
     function initMap() {
         const mapEl = document.getElementById('lubartowMap');
         if (!mapEl || typeof L === 'undefined') return;
@@ -52,26 +85,38 @@
             attributionControl: false
         });
 
-        // Niezawodna warstwa kafelkowa CARTO Voyager bez wymagania klucza API
-        const tileProvider = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        // Warstwa kafelkowa – OpenStreetMap z ciemnym motywem przez filtr CSS.
+        // CartoDB (używany do VIII 2026) wymaga darmowego klucza API: carto.com/basemaps/apikey.
+        // Poniższy OSM NIE wymaga klucza; ciemność dodaje styl w css/style.css (#lubartowMap .leaflet-tile).
+        // Dawny URL CartoDB pozostaje na końcu jako zakomentowany fallback.
+        const tileProvider = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
-            subdomains: 'abcd',
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            subdomains: 'abc',
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Fallback na wypadek problemów z siecią (używa darmowych kafelków CyclOSM)
+        // Auto-fallback: gdyby główna warstwa zwróciła błąd (rate-limit, awaria),
+        // bezpiecznie przełącz na kopię Humanitarnej Grupy OSM Francja.
         tileProvider.on('tileerror', () => {
             if (window._bastionMapFallbackUsed) return;
             window._bastionMapFallbackUsed = true;
-            console.warn('Bastion: przełączam na zapasową warstwę CyclOSM.');
-            const fallback = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-                maxZoom: 18,
+            console.warn('Bastion: główna warstwa kafelkowa zwróciła błąd, przełączam na OSM France HOT.');
+            const fallback = L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                maxZoom: 19,
                 subdomains: 'abc',
-                attribution: '&copy; OpenStreetMap contributors'
+                attribution: '&copy; OpenStreetMap contributors, Tiles HOT'
             });
             map.removeLayer(tileProvider);
             fallback.addTo(map);
         });
+
+        // Dawna warstwa CartoDB dark_all — zakomentowana. Aby wrócić do niej:
+        // 1) zarejestruj się na carto.com/basemaps/apikey (darmowe, bez konta),
+        // 2) wstaw klucz w URL po '?key=', 3) odkomentuj poniższy blok i zakomentuj powyższy OSM.
+        // L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=TWOJ_KLUCZ', {
+        //     maxZoom: 18, subdomains: 'abcd',
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        // }).addTo(map);
 
         // Dodaj atrybuty
         L.control.attribution({ position: 'bottomleft', prefix: false })
@@ -85,100 +130,111 @@
         generatePointsList(MAP_POINTS);
     }
 
-        // TŁO MAPY (Zmienione na otwarte kafelki Carto Voyager - NIE WYMAGAJĄ KLUCZA API)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 19
-        }).addTo(map);
-
-        // Załaduj punkty, jeśli są dostępne w obiekcie window.MAP_PLACES
-        if (window.MAP_PLACES && Array.isArray(window.MAP_PLACES)) {
-            loadMarkers(window.MAP_PLACES);
-        }
-
-        // Podpięcie przycisków filtrowania
-        setupFilterButtons();
-    }
-
-    // Wczytywanie punktów na mapę
-    function loadMarkers(places) {
-        // Czyszczenie istniejących markerów
-        markers.forEach(m => map.removeLayer(m.instance));
+    // Dodaje markery do mapy
+    function addMarkers(points) {
+        // Usuń stare markery
+        markers.forEach(m => map.removeLayer(m));
         markers = [];
 
-        const bounds = L.latLngBounds();
+        points.forEach(point => {
+            if (activeFilter !== 'all' && point.type !== activeFilter) return;
 
-        places.forEach(place => {
-            if (!place.lat || !place.lng) return;
+            const icon = createMarkerIcon(point.type, point.importance === 'high');
+            const marker = L.marker([point.lat, point.lng], { icon })
+                .addTo(map)
+                .bindPopup(buildPopupHTML(point), {
+                    maxWidth: 300,
+                    className: 'bastion-popup'
+                });
 
-            const icon = createMarkerIcon(place.type, place.highImportance);
-            const marker = L.marker([place.lat, place.lng], { icon: icon });
+            // Efekt hover
+            marker.on('mouseover', function() {
+                this.openPopup();
+            });
 
-            // Zbudowanie zawartości Popupa
-            const popupContent = `
-                <div class="map-popup-card">
-                    <span class="badge badge-${place.type}">${getCategoryName(place.type)}</span>
-                    <h3>${place.title}</h3>
-                    <p>${place.description || ''}</p>
-                    ${place.date ? `<div class="popup-date">📅 ${place.date}</div>` : ''}
-                    ${place.location ? `<div class="popup-location">📍 ${place.location}</div>` : ''}
-                </div>
-            `;
+            markers.push(marker);
+            point._marker = marker;
+        });
+    }
 
-            marker.bindPopup(popupContent);
-            marker.addTo(map);
-
-            bounds.extend([place.lat, place.lng]);
-
-            markers.push({
-                id: place.id,
-                type: place.type,
-                instance: marker
+    // Filtrowanie markerów
+    function setupFilters() {
+        const legendItems = document.querySelectorAll('.legend-item');
+        legendItems.forEach(item => {
+            item.addEventListener('click', function() {
+                legendItems.forEach(li => li.classList.remove('active'));
+                this.classList.add('active');
+                activeFilter = this.getAttribute('data-filter') || 'all';
+                addMarkers(MAP_POINTS);
+                generatePointsList(MAP_POINTS.filter(p => activeFilter === 'all' || p.type === activeFilter));
             });
         });
+    }
 
-        // Dopasowanie widoku do wszystkich punktów
-        if (markers.length > 0) {
-            map.fitBounds(bounds, { padding: [30, 30] });
+    // Generuje listę kart punktów pod mapą
+    function generatePointsList(points) {
+        const grid = document.getElementById('mplGrid');
+        if (!grid) return;
+
+        const filtered = activeFilter === 'all' ? points : points.filter(p => p.type === activeFilter);
+
+        grid.innerHTML = filtered.map(point => {
+            const color = MARKER_COLORS[point.type] || '#999';
+            const typeLabels = {
+                represje: 'Represje',
+                walki:    'Walki',
+                bunkry:   'Bunkier',
+                pamiec:   'Pamięć'
+            };
+            return `
+                <div class="mpl-card fade-in" data-point-id="${point.id}" onclick="focusMapPoint('${point.id}')">
+                    <div class="mpl-card-dot" style="background:${color};"></div>
+                    <div class="mpl-card-content">
+                        <div class="mpl-card-name">${point.name}</div>
+                        <div class="mpl-card-desc">
+                            <span style="color:${color}; font-size:0.65rem;">[${typeLabels[point.type]}]</span> 
+                            ${point.date}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Trigger fade-in dla nowych kart
+        requestAnimationFrame(() => {
+            grid.querySelectorAll('.fade-in').forEach(el => {
+                setTimeout(() => el.classList.add('visible'), 50);
+            });
+        });
+    }
+
+    // Funkcja globalna – centruj mapę na wybranym punkcie
+    window.focusMapPoint = function(pointId) {
+        const point = MAP_POINTS.find(p => p.id === pointId);
+        if (!point || !map) return;
+        
+        map.setView([point.lat, point.lng], 13, { animate: true, duration: 1 });
+        if (point._marker) {
+            point._marker.openPopup();
+        }
+        
+        // Przewiń do mapy
+        document.getElementById('mapa').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // Inicjalizacja po załadowaniu DOM
+    function init() {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                initMap();
+                setupFilters();
+            });
+        } else {
+            initMap();
+            setupFilters();
         }
     }
 
-    // Nazwy kategorii dla etykiet
-    function getCategoryName(type) {
-        const names = {
-            represje: 'Miejsce Represji',
-            walki: 'Miejsce Walk',
-            bunkry: 'Bunkier / Kwatera',
-            pamiec: 'Miejsce Pamięci'
-        };
-        return names[type] || 'Inne';
-    }
-
-    // Obsługa filtrowania
-    function setupFilterButtons() {
-        const filterBtns = document.querySelectorAll('[data-filter]');
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const filter = this.getAttribute('data-filter');
-                
-                filterBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                activeFilter = filter;
-
-                markers.forEach(m => {
-                    if (filter === 'all' || m.type === filter) {
-                        map.addLayer(m.instance);
-                    } else {
-                        map.removeLayer(m.instance);
-                    }
-                });
-            });
-        });
-    }
-
-    // Uruchomienie po załadowaniu drzewa DOM
-    document.addEventListener('DOMContentLoaded', initMap);
+    init();
 
 })();
